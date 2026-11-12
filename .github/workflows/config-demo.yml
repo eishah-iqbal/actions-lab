@@ -6,7 +6,7 @@ on:
       greeting:
         description: Text to print
         required: true
-        default: Hello
+        default: Hellogit add .github
 
 permissions:
   contents: read
