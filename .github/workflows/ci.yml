@@ -1,4 +1,4 @@
-name: CI
+name: ci
 
 on:
   push:
@@ -36,3 +36,20 @@ jobs:
 
       - run: npm ci
       - run: npm test
+
+  required-check:
+    name: Required Checks
+    if: always()
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify all CI jobs passed
+        env:
+          LINT_RESULT: ${{ needs.lint.result }}
+          TEST_RESULT: ${{ needs.test.result }}
+        run: |
+          if [ "$LINT_RESULT" != "success" ] || [ "$TEST_RESULT" != "success" ]; then
+            echo "CI checks failed"
+            exit 1
+          fi
+          echo "All CI checks passed"
